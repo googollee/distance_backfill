@@ -9,7 +9,7 @@ SIMULATOR ?= platform=iOS Simulator,name=iPhone 17 Pro,OS=latest
 
 APP_STORE_CONNECT_KEY_ID ?= $(ASC_KEY_ID)
 APP_STORE_CONNECT_ISSUER_ID ?= $(ASC_ISSUER_ID)
-APP_STORE_CONNECT_KEY_PATH ?= appstoreconnect/AuthKey_$(ASC_KEY_ID).p8
+APP_STORE_CONNECT_KEY_PATH ?= $(abspath appstoreconnect/AuthKey_$(ASC_KEY_ID).p8)
 
 IN_GIT_REPO := $(shell git rev-parse --is-inside-work-tree 2>/dev/null)
 
@@ -63,6 +63,7 @@ release: generate
 		-archivePath $(ARCHIVE_PATH) \
 		-exportPath $(EXPORT_PATH) \
 		-exportOptionsPlist $(EXPORT_OPTIONS) \
+		-allowProvisioningUpdates \
 		-authenticationKeyPath "$(APP_STORE_CONNECT_KEY_PATH)" \
 		-authenticationKeyID "$(APP_STORE_CONNECT_KEY_ID)" \
 		-authenticationKeyIssuerID "$(APP_STORE_CONNECT_ISSUER_ID)"
