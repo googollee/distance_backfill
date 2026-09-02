@@ -1,0 +1,3 @@
+"CFBundleDisplayName" = "Distance Backfill";
+"NSHealthShareUsageDescription" = "Used to read your workout records in order to detect missing standalone distance data.";
+"NSHealthUpdateUsageDescription" = "Used to write the distance data for your workouts, completing the Health app's distance statistics.";

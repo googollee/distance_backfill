@@ -1,0 +1,3 @@
+"CFBundleDisplayName" = "里程补全";
+"NSHealthShareUsageDescription" = "需要读取你的训练记录，用于检测缺失的独立距离数据";
+"NSHealthUpdateUsageDescription" = "需要写入训练对应的距离数据，补全健康 App 的距离统计";
