@@ -5,9 +5,11 @@ EXPORT_PATH := $(BUILD_DIR)/export
 EXPORT_OPTIONS := ExportOptions.plist
 SIMULATOR ?= platform=iOS Simulator,name=iPhone 17 Pro,OS=latest
 
-APP_STORE_CONNECT_KEY_ID ?=
-APP_STORE_CONNECT_ISSUER_ID ?=
-APP_STORE_CONNECT_KEY_PATH ?=
+-include appstoreconnect/config.mk
+
+APP_STORE_CONNECT_KEY_ID ?= $(ASC_KEY_ID)
+APP_STORE_CONNECT_ISSUER_ID ?= $(ASC_ISSUER_ID)
+APP_STORE_CONNECT_KEY_PATH ?= appstoreconnect/AuthKey_$(ASC_KEY_ID).p8
 
 IN_GIT_REPO := $(shell git rev-parse --is-inside-work-tree 2>/dev/null)
 
@@ -16,7 +18,7 @@ GIT_HASH := $(shell git rev-parse --short HEAD 2>/dev/null)
 GIT_DIRTY := $(shell git status --porcelain 2>/dev/null)
 GIT_TAG := $(shell git describe --tags --exact-match 2>/dev/null)
 ifneq ($(strip $(GIT_DIRTY)),)
-RELEASE_VERSION := $(GIT_HASH)
+RELEASE_VERSION := $(GIT_HASH)+
 else ifneq ($(strip $(GIT_TAG)),)
 RELEASE_VERSION := $(patsubst v%,%,$(GIT_TAG))
 else
@@ -51,6 +53,10 @@ release: generate
 		-scheme $(SCHEME) \
 		-archivePath $(ARCHIVE_PATH) \
 		-destination 'generic/platform=iOS' \
+		-allowProvisioningUpdates \
+		-authenticationKeyPath "$(APP_STORE_CONNECT_KEY_PATH)" \
+		-authenticationKeyID "$(APP_STORE_CONNECT_KEY_ID)" \
+		-authenticationKeyIssuerID "$(APP_STORE_CONNECT_ISSUER_ID)" \
 		MARKETING_VERSION="$(RELEASE_VERSION)" \
 		CURRENT_PROJECT_VERSION="$(BUILD_NUMBER)"
 	xcodebuild -exportArchive \
